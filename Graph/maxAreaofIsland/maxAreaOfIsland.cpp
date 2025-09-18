@@ -1,12 +1,13 @@
 #include<iostream>
 using namespace std;
 
-int bfs(int row,int col,vector<vector<int>>&visited,vector<vector<int>>&grid)
+int bfs(int row,int col,vector<vector<int>>&grid)
 {
-    visited[row][col] = 1;
     int rowSize = grid.size();
     int colSize = grid[0].size();
     queue<pair<int,int>>q;
+    grid[row][col] = 0;
+
     q.push({row,col});
 
     int area = 1;
@@ -28,9 +29,9 @@ int bfs(int row,int col,vector<vector<int>>&visited,vector<vector<int>>&grid)
                 int connectedRow = row+nRow;
                 int connectedCol = col+nCol;
                 if(connectedRow>=0 && connectedRow<rowSize  && connectedCol>=0 && connectedCol<colSize 
-                && !visited[connectedRow][connectedCol] && grid[connectedRow][connectedCol]==1)
+                 && grid[connectedRow][connectedCol]==1)
                 {
-                    visited[connectedRow][connectedCol] = 1;
+                    grid[connectedRow][connectedCol] = 0;
                     q.push({connectedRow,connectedCol});
                     area++;
 
@@ -47,16 +48,15 @@ int maxAreaOfIsland(vector<vector<int>>&grid)
     int rowSize = grid.size();
     int colSize = grid[0].size();
 
-    vector<vector<int>>visited(rowSize,vector<int>(colSize,0));
     int maxArea = 0;
 
     for(int row=0;row<rowSize;++row)
     {
         for(int col=0;col<colSize;++col)
         {
-            if(!visited[row][col] && grid[row][col]==1)
+            if(grid[row][col]==1)
             {
-                int area = bfs(row,col,visited,grid);
+                int area = bfs(row,col,grid);
                 maxArea = max(maxArea,area);
             }
         }
